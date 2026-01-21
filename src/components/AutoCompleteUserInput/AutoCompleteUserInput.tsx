@@ -41,11 +41,11 @@ const parseAndFormatName = (fullName: string) => {
 
   const hasSuffix = remaining.length > 1;
   const suffix = hasSuffix ? remaining[remaining.length - 1] : undefined;
-  const lastNameTokens = hasSuffix
+  const lastNameSegments = hasSuffix
     ? remaining.slice(0, -1)
     : remaining;
 
-  const lastName = lastNameTokens.join(" ");
+  const lastName = lastNameSegments.join(" ");
 
   return {
     display:
@@ -94,7 +94,10 @@ const UserAutocomplete: React.FC = () => {
       mx: "auto"
     }}>
       {loading ? (
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
+        <Box sx={{
+          display: "flex",
+          justifyContent: "center"
+        }}>
           <Typography>Loading...</Typography>
         </Box>
       ) : (
@@ -113,7 +116,7 @@ const UserAutocomplete: React.FC = () => {
       )}
 
       {selectedUser && (
-        <Box sx={{ mt: 3 }}>
+        <Box sx={{ mt: 4 }}>
           <Typography>{selectedUser.nameMeta.display}</Typography>
           <Typography>{selectedUser.address.street}</Typography>
           <Typography>{selectedUser.address.suite}</Typography>
