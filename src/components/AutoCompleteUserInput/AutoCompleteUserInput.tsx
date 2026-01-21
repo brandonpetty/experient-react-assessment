@@ -64,12 +64,12 @@ const UserAutocomplete: React.FC = () => {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const response = await fetch(
+      try {
+        const response = await fetch(
         "https://jsonplaceholder.typicode.com/users"
       );
-      const data: User[] = await response.json();
-
-      const formattedUsers = data
+        const data: User[] = await response.json();
+        const formattedUsers = data
         .map((user) => ({
           ...user,
           nameMeta: parseAndFormatName(user.name),
@@ -80,8 +80,13 @@ const UserAutocomplete: React.FC = () => {
           )
         );
 
-      setUsers(formattedUsers);
-      setLoading(false);
+        setUsers(formattedUsers);
+      } catch (error) {
+        // ideally log error
+        console.error("Failed to fetch users", error);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchUsers();
@@ -102,6 +107,7 @@ const UserAutocomplete: React.FC = () => {
         </Box>
       ) : (
         <Autocomplete
+          clearOnEscape={true}
           options={users}
           getOptionLabel={
             (option) => option.nameMeta.display
